@@ -1,5 +1,5 @@
 services:
-  mongodb:
+  mongodbmajima:
     image: 'mongo:latest'
     env_file: .env
     environment:

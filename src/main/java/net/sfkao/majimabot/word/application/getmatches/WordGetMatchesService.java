@@ -1,7 +1,7 @@
 package net.sfkao.majimabot.word.application.getmatches;
 
-import com.austinv11.servicer.Service;
 import net.sfkao.majimabot.word.domain.Word;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

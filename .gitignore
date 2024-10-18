@@ -16,6 +16,7 @@ target/
 /data/
 
 .env
+.env.docker
 
 ### IntelliJ IDEA ###
 .idea

@@ -1,12 +1,14 @@
 package net.sfkao.majimabot.word.application.getmatches;
 
-import com.austinv11.servicer.Service;
 import net.sfkao.majimabot.word.domain.Word;
 import net.sfkao.majimabot.word.domain.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WordGetMatchesServiceImpl implements WordGetMatchesService{
@@ -19,10 +21,11 @@ public class WordGetMatchesServiceImpl implements WordGetMatchesService{
 
         List<Word> byPalabraIn = wordRepository.findByPalabraIn(palabras);
 
-        List<Long> idsUsuarios = new ArrayList<>();
+        Map<Word, List<Long>> usuarios = new HashMap<>();
 
         List<Word> minasActivadas = byPalabraIn.stream().filter(p -> {
-            if (idsUsuarios.contains(p.getUserId()))
+            List<Long> idsUsuarios = usuarios.computeIfAbsent(p, k -> new ArrayList<>());
+            if(idsUsuarios.contains(p.getUserId()))
                 return false;
             idsUsuarios.add(p.getUserId());
             return true;
