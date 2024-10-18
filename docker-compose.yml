@@ -19,7 +19,7 @@ services:
   mongodbmajima:
     image: 'mongo:latest'
     container_name: majimabotmongo
-    env_file: .env
+    env_file: .env.docker
     environment:
       - 'MONGO_INITDB_DATABASE=majimabot'
     volumes:
@@ -33,7 +33,7 @@ services:
     image: mongo-express:latest
     container_name: majimabotmongoexpress
     restart: unless-stopped
-    env_file: .env
+    env_file: .env.docker
     ports:
       - 14564:8081
     environment:
