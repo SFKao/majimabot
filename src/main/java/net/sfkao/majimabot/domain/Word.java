@@ -17,6 +17,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Word {
 
+    private String id;
+
     @EqualsAndHashCode.Include
     private String palabra;
 

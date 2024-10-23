@@ -24,7 +24,7 @@ services:
     networks:
       - majimaNetwork
     depends_on:
-      mongodb:
+      mongodbmajima:
         condition: service_healthy
 
 networks:

@@ -16,7 +16,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     private final UserRepository userRepository;
 
-    private final UserMapper userMapper;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
     public Optional<User> findById(long id) {

@@ -15,6 +15,5 @@ public interface WordMapper {
     Word toDomain(WordEntity wordEntity);
 
     // Mapear de dominio a entidad
-    @Mapping(target = "id", ignore = true)  // Si quieres que el ID sea generado por la base de datos
     WordEntity toEntity(Word word);
 }

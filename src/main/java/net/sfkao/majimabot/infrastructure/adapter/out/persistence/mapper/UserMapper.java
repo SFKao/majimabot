@@ -15,6 +15,5 @@ public interface UserMapper {
     User toDomain(UserEntity userEntity);
 
     // Mapear de dominio a entidad
-    @Mapping(target = "id", ignore = true)  // Si quieres que el ID sea generado por la base de datos
     UserEntity toEntity(User user);
 }

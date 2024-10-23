@@ -13,6 +13,6 @@ public class WordCleanerImpl implements WordCleaner{
         palabra = Normalizer.normalize(palabra, Normalizer.Form.NFKD);
         palabra = palabra.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 
-        return palabra.trim();
+        return palabra.toLowerCase().trim();
     }
 }

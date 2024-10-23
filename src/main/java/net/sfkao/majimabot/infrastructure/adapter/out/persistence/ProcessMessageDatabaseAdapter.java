@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProcessMessageDatabaseAdapter implements ProcessMessageDatabasePort {
     private final WordRepository wordRepository;
-    private final WordMapper wordMapper;
+    private final WordMapper wordMapper = WordMapper.INSTANCE;
 
     @Override
     public List<Word> findByPalabraIn(List<String> palabras) {
         List<WordEntity> wordEntities = wordRepository.findByPalabraIn(palabras);
         return wordEntities.stream()
                 .map(wordMapper::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public void deleteAll(List<Word> words) {
         List<WordEntity> wordEntities = words.stream()
                 .map(wordMapper::toEntity)
-                .collect(Collectors.toList());
+                .toList();
         wordRepository.deleteAll(wordEntities);
     }
 }
