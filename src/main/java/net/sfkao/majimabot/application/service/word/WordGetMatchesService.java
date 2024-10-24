@@ -8,6 +8,6 @@ import java.util.List;
 @Service
 public interface WordGetMatchesService {
 
-    List<Word> getMatches(List<String> palabras);
+    List<Word> getMatches(String frase);
 
 }

@@ -8,6 +8,7 @@ import net.sfkao.majimabot.application.port.in.UpdateBlackListPort;
 import net.sfkao.majimabot.application.port.out.WordBlackListDatabasePort;
 import net.sfkao.majimabot.application.util.WordCleaner;
 import net.sfkao.majimabot.domain.Word;
+import net.sfkao.majimabot.domain.exception.InvalidPalabraException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -23,23 +24,14 @@ public class UpdateBlackListService implements UpdateBlackListPort {
 
 
     @Override
-    public Mono<Void> processMessage(ChatInputInteractionEvent event) {
-        String palabra = event.getOption("palabra")
-                .flatMap(ApplicationCommandInteractionOption::getValue)
-                .map(ApplicationCommandInteractionOptionValue::asString)
-                .orElse("");
+    public Word processMessage(Word palabra) throws InvalidPalabraException {
 
-        if (palabra.isEmpty()) {
-            return event.reply("Se necesita una palabra jefe");
+        if (palabra.getPalabra().isEmpty()) {
+            throw new InvalidPalabraException("Se necesita una palabra jefe");
         }
 
-        palabra = wordCleaner.clean(palabra);
+        palabra.setPalabra(wordCleaner.clean(palabra.getPalabra()));
 
-        Word word = new Word()
-                .setPalabra(palabra)
-                .setUserId(event.getInteraction().getUser().getUserData().id().asLong());
-
-        return wordBlackListDatabasePort.save(word)
-                .then(event.reply().withEphemeral(true).withContent("Se ha añadido la palabra \"" + palabra + "\" a la blacklist"));
+        return wordBlackListDatabasePort.save(palabra);
     }
 }

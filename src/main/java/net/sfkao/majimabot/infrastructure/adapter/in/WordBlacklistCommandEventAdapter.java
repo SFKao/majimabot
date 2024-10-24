@@ -1,11 +1,15 @@
 package net.sfkao.majimabot.infrastructure.adapter.in;
 
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent;
+import discord4j.core.object.command.ApplicationCommandInteractionOption;
+import discord4j.core.object.command.ApplicationCommandInteractionOptionValue;
 import discord4j.core.object.command.ApplicationCommandOption;
 import discord4j.discordjson.json.ApplicationCommandOptionData;
 import discord4j.discordjson.json.ApplicationCommandRequest;
 import lombok.extern.log4j.Log4j2;
 import net.sfkao.majimabot.application.port.in.UpdateBlackListPort;
+import net.sfkao.majimabot.domain.Word;
+import net.sfkao.majimabot.domain.exception.InvalidPalabraException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
@@ -41,7 +45,21 @@ public class WordBlacklistCommandEventAdapter implements DiscordCommandEvent<Cha
 
     @Override
     public Mono<Void> execute(ChatInputInteractionEvent event) {
-        return this.processMessage(event);
+
+        String content = event.getOption("palabra")
+                .flatMap(ApplicationCommandInteractionOption::getValue)
+                .map(ApplicationCommandInteractionOptionValue::asString)
+                .orElse("");
+
+        Word word = null;
+        try {
+            word = this.processMessage(new Word(null, content, event.getInteraction().getUser().getUserData().id().asLong()));
+        } catch (InvalidPalabraException e) {
+            return event.reply().withEphemeral(true).withContent("Se necesita una palabra").then();
+        }
+
+        return event.reply().withEphemeral(true).withContent("Se ha añadido la palabra \"" + word.getPalabra() + "\" a la blacklist").then();
+
     }
 
     @Override
@@ -56,7 +74,7 @@ public class WordBlacklistCommandEventAdapter implements DiscordCommandEvent<Cha
     }
 
     @Override
-    public Mono<Void> processMessage(ChatInputInteractionEvent event) {
-        return this.updateBlackListPort.processMessage(event);
+    public Word processMessage(Word palabra) throws InvalidPalabraException {
+        return this.updateBlackListPort.processMessage(palabra);
     }
 }

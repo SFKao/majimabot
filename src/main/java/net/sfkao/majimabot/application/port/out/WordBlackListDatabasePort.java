@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 public interface WordBlackListDatabasePort {
     void incrementMines(long userId, int count) throws UserNotFoundException;
     void incrementPoints(long userId, int points) throws UserNotFoundException;
-    Mono<Word> save(Word word);
+    Word save(Word word);
 }

@@ -37,9 +37,9 @@ public class WordBlackListDatabaseAdapter implements WordBlackListDatabasePort {
     }
 
     @Override
-    public Mono<Word> save(Word word) {
+    public Word save(Word word) {
         WordEntity wordEntity = wordMapper.toEntity(word);
         WordEntity savedEntity = wordRepository.save(wordEntity);
-        return Mono.just(wordMapper.toDomain(savedEntity));
+        return wordMapper.toDomain(savedEntity);
     }
 }
